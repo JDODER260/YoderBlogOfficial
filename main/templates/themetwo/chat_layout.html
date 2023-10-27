@@ -1,0 +1,114 @@
+{% load static %}
+{% csrf_token %}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport">
+    <meta name="Description" content="Yoder Chat is an instant chat for easier comunication">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+    {% if user.is_authenticated %}
+    {% if user.profile.theme %}
+    <link rel="stylesheet" type="text/css" href="{% static 'light.css' %}">
+    {% else %}
+    <link rel="stylesheet" type="text/css" href="{% static 'dark.css' %}">
+    {% endif %}
+    {% else %}
+    <link rel="stylesheet" type="text/css" href="{% static 'light.css' %}">
+    {% endif %}
+
+    {% if title %}
+    <title>Yoder Blog - {{ title }}</title>
+    {% else %}
+    <title>Yoder Blog</title>
+    {% endif %}
+</head>
+
+
+<body id="body">
+    {% csrf_token %}
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+            <div class="container">
+                <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Yoder Blog</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                    aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggle">
+                    <div class="navbar-nav mr-auto">
+                        <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+                        <ul class="navbar-nav mr-auto">
+                            {% if cat_menu %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Categories
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'nofilter' %}">View All</a>
+                                    <a class="dropdown-item" href="{% url 'createcat' %}">Add Category</a>
+                                    <hr>
+                                    {% for item in cat_menu %}
+                                    <a class="dropdown-item" href="{% url 'cats' item %}">{{ item }}</a>
+                                    {% endfor %}
+                                </div>
+                            </li>
+                            {% endif %}
+                            {% if chat_menu %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Message Users
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    {% for item in chat_menu %}
+                                    {% if item.is_active %}
+                                    {% if item == user %}
+                                    {% else %}
+                                    <a class="dropdown-item" href="{% url 'location' item.username %}">{{ item }}
+                                        {{chat_menu.total}}</a>
+                                    {% endif %}{% endif %}
+                                    {% endfor %}
+                                </div>
+                            </li>
+                        </ul>
+                        {% endif %}
+                        <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+                    </div>
+                    <!-- Navbar Right Side -->
+                    <div class="navbar-nav">
+                        {% if user.is_authenticated %}
+                        {% if user.is_superuser %}
+                        <a class="nav-item nav-link" href="{% url 'users' %}">Users</a>
+                        {% endif %}
+                        <a class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
+                        <a class="nav-item nav-link" href="{% url 'profile' %}">Profile</a>
+                        <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                        {% else %}
+                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main role="main" class="container-flex" style="margin-left:60px; overflow:hidden;">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% block content %}{% endblock %}
+    </main>
+
+</html>

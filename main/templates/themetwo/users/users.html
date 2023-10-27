@@ -1,0 +1,63 @@
+
+{% extends "themetwo/layout.html" %}
+
+{% block content %}
+{% with number_of_users as total_users %}
+<h3>Registered users: {{ total_users }}</h3>
+<h3>Active users: {{ active_users|length }}</h3>
+{% endwith %}
+
+  <div class="row">
+    {% for user in users %}
+      {% with now|date:"U" as current_time %}
+        {% with user.profile.last_active|date:"U" as last_active_time %}
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100">
+              <img class="card-img-top user-profile-pic" src="{{ user.profile.profile_pic.url }}" alt="User Logo">
+              <div class="card-body">
+                <h4 class="card-title">{{ user.username }}{% if user.profile.are_active %}🟢{% else %}🔴{% endif %}</h4>
+                <p class="card-text">{{ user.profile.bio|safe }}</p>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">IP: {{ user.profile.ip }}</li>
+                  <li class="list-group-item">Theme: {{ user.profile.theme }}</li>
+                  <li class="list-group-item">Likes: {{ user.profile.total_likes }}</li>
+                  <li class="list-group-item">Are Active: {{ user.profile.are_active }}</li>
+                  <li class="list-group-item">Last Active: {{ user.profile.last_active }}</li>
+                </ul>
+              </div>
+              <div class="card-footer">
+                <a href="{% url 'user-posts' user.username %}" class="btn btn-primary">View Posts</a>
+              </div>
+            </div>
+          </div>
+        {% endwith %}
+      {% endwith %}
+    {% endfor %}
+  </div>
+  <div style="margin: 50px;">
+    {% if is_paginated %}
+      {% if page_obj.has_previous %}
+        <a href="?page=1" class="btn btn-outline-info mb-4 mr-4">First</a>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <a href="?page={{ num }}" class="btn btn-info mb-4">{{ page_obj.number }}</a>
+      {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+                <a href="?page={{ num }}" class="btn btn-outline-info mb-4">{{ num }}</a>
+      {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-info mb-4 ml-4">Last</a>
+      {% endif %}
+      <small class="text-muted">Total Pages: {{ page_obj.paginator.num_pages }}</small>
+    {% endif %}
+  </div>
+  <footer>This is a filtered page if you want to see any specific user details go to the Users menu in the navigation bar!</footer>
+  <style>
+    .user-profile-pic {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+  </style>
+{% endblock content %}

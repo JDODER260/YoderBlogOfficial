@@ -1,0 +1,44 @@
+{% extends "blog/layout.html" %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Terms of Service</h1>
+
+    <p>Welcome to our website! By accessing or using our website and any services provided by our company, you are agreeing to be bound by the following terms and conditions (“Terms of Service”, “Terms”), including those additional terms and conditions and policies referenced herein and/or available by hyperlink. If you do not agree to all the terms and conditions of this agreement, then you may not access the website or use any services.</p>
+
+    <h2>Use of Website</h2>
+    <p>Our website and services are intended solely for users who are thirteen (13) years of age or older. If you are thirteen years of age or older, but under the age of 18, you should review these Terms of Service with your parent or guardian to ensure that you and your parent or guardian understand and agree to these Terms of Service.</p>
+    <p>You shall not use the Website or the Services for any illegal or unauthorized purpose. You shall comply with all laws, rules and regulations (for example, federal, state, local and provincial) applicable to your use of the Website and the Services, including but not limited to, copyright laws.</p>
+    
+    <h2>User Conduct and Acceptable Use Policy</h2>
+    <p>You are responsible for all Content posted and activity that occurs under your account. You shall not engage in any activity that, in our sole and absolute discretion, is considered unacceptable, or in any activity that is illegal or that violates any right of any person or entity. This includes, but is not limited to, the following prohibited activities:</p>
+    <ul>
+        <li>Posting or transmitting any Content that is illegal, fraudulent, defamatory, libellous, or otherwise offensive.</li>
+        <li>Engaging in spamming, or any other unsolicited bulk email, or computer or network hacking or cracking.</li>
+        <li>Modifying, adapting, translating, or reverse engineering any portion of the Website or Services.</li>
+    </ul>
+
+    <h2>Intellectual Property Rights</h2>
+    <p>The Website and Services and all materials therein or transferred thereby, including, without limitation, software, images, text, graphics, logos, patents, trademarks, service marks, copyrights, photographs, audio, videos, music, and Content, and all Intellectual Property Rights related thereto, are the exclusive property of our company and its licensors.</p>
+    
+...
+    <h2>Disclaimer of Warranties</h2>
+    <p>Our company does not guarantee, represent, or warrant that your use of our service will be uninterrupted or error-free, and you agree that from time to time we may remove the service for indefinite periods of time, or cancel the service at any time, without notice to you.</p>
+    <p>You expressly agree that your use of, or inability to use, the service is at your sole risk. The service and all products and services delivered to you through the service are (except as expressly stated by us) provided 'as is' and 'as available' for your use, without any representation, warranties or conditions of any kind, either express or implied, including all implied warranties or conditions of merchantability, merchantable quality, fitness for a particular purpose, durability, title, and non-infringement.</p>
+    
+    <h2>Limitations of Liability</h2>
+    <p>In no case shall our company, our directors, officers, employees, affiliates, agents, contractors, interns, suppliers, service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings, loss of data, replacement costs, or any similar damages, whether based in contract, tort (including negligence), strict liability or otherwise, arising from your use of any of the service or any products procured using the service, or for any other claim related in any way to your use of the service or any product, including, but not limited to, any errors or omissions in any content, or any loss or damage of any kind incurred as a result of the use of the service or any content (or product) posted, transmitted, or otherwise made available via the service, even if advised of their possibility.</p>
+    <p>In no event shall our total liability to you for all damages, losses, and causes of action exceed the amount paid by you, if any, for accessing this site.</p>
+    
+    <h2>Governing Law and Jurisdiction</h2>
+    <p>These Terms of Service and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of the [Country/State].</p>
+    
+    <h2>Changes to the Terms of Service</h2>
+    <p>We reserve the right to make changes to these Terms of Service at any time. Your continued use of the website following any changes to the terms will be considered acceptance of those changes.</p>
+</div>
+{% if user.is_authenticated %}
+<hr>
+<a href="{% url 'profile' %}" class="btn btn-primary">Return to profile</a><br><br>
+{% endif %}
+{% endblock %}

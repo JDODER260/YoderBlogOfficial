@@ -1,0 +1,64 @@
+{% extends "themetwo/layout.html" %}
+
+{% block content %}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top rounded-circle mx-auto mt-4" style="width: 130px; height: 130px;" src="{{ postuser.profile.profile_pic.url }}" alt="{{ postuser.username }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ postuser.get_full_name }}</h5>
+                    <p class="card-text">{{ postuser.email }}</p>
+                    {% if postuser.profile.terms %}
+                        <p class="card-text">You have accepted our terms and agreements.</p>
+                    {% else %}
+                        <p class="card-text text-danger">You have not accepted our terms and agreements. Please do so <a href="{% url 'profile' %}">here</a>.</p>
+                    {% endif %}
+                    <hr>
+                    {% if user.username != postuser.username %}
+<form action="{% url 'like_user' postuser.pk %}" method="POST">
+    {% csrf_token %}{% if liked %}
+    <button type="submit" name="postuser_id" value="{{ postuser.id }}" class="btn btn-warning btn-sm">Unlike</button> -
+    {{ total_likes }} Like/s
+    {% else %}
+    <button type="submit" name="postuser_id" value="{{ postuser.id }}" class="btn btn-outline-primary btn-sm">Like</button> -
+    {{ total_likes }} Like/s
+    {% endif %}
+</form>
+{% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Posts</h3>
+                </div>
+                <div class="card-body">
+                    {% if posts %}
+                        {% for post in posts %}
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5 class="card-title">{{ post.title }}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">{{ post.author.get_full_name }} - {{ post.date_posted|date:"F d, Y" }}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ post.content|truncatechars:150|safe }}</p>
+                                    <a href="{% url 'post-detail' post.pk %}" class="btn btn-primary">Read more</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No posts found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+

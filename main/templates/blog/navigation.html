@@ -1,0 +1,39 @@
+{% extends 'blog/layout.html' %}
+
+{% block content %}
+  <div class="container">
+    <div class="row"><div class="col-md-4">
+          <h6>Categorys</h6>
+          {% for cat in cat_menu %}
+              <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'cats' cat.name %}">{{ cat.name }}</a>
+            {% endfor %}<h6>Chat with a user</h6>
+            {% for chat in chat_menu %}
+            
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'chat' chat.pk %}">{{ chat.username }}</a>
+          {% endfor %}</div>
+      <div class="col-lg-8">
+        <h5>Navigation</h5>
+        <nav class="nav nav-pills flex-column flex-sm-row mb-4">
+          <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'blog-home' %}">Home</a>
+          <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'blog-about' %}">About</a>
+          <a class="flex-sm-fill text-sm-center nav-link" href="/chat/1/">Contact</a>
+          
+          {% if user.is_authenticated %}
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'post-create' %}">New Post</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'createcat' %}">New Category</a>
+            
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'chat-home' %}">Chat Home</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'room_list' %}">Room List</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'terms' %}">Terms of Service</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'profile' %}">Profile</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'logout' %}">Logout</a>
+          {% else %}
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'login' %}">Login</a>
+            <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'register' %}">Register</a>
+          {% endif %}
+        </nav>
+        <h6>This site was ment for computers so sorry about the inconviniance</h6>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

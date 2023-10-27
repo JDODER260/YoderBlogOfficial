@@ -1,0 +1,25 @@
+{% extends 'blog/layout.html' %}
+{% block title %}New Category{% endblock title %}
+{% block content %}
+{% load crispy_forms_tags %}
+<div>
+    {% if user.is_authenticated %}
+    <div class="form-group">
+        <h2>Create Category</h2>
+<form method="POST">
+                    {% csrf_token %}
+                    
+
+<div id="div_id_name" class="form-group"> <label for="id_name" class=" requiredField">
+                Name<span class="asteriskField">*</span> </label> <div> <input type="text" name="name" class="modwid textinput textInput form-control" placeholder="Category Name" maxlength="255" required="" id="id_name"> </div> </div>
+
+                    <br>
+                    <button class="btn btn-primary" type="submit">Create</button>
+                </form>
+    </div>
+    {% else %}
+    <h1>YOU HAVE NO RIGHT TO BE ON THIS PAGE</h1>
+    <a class="btn btn-danger" href="{% url 'blog-home' %}">GET OFF</a>
+    {% endif %}
+</div>
+{% endblock content %}

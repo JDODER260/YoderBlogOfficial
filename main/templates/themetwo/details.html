@@ -1,0 +1,95 @@
+{% extends "themetwo/layout.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% if not user.profile.terms %}
+<h1> You have not accepted out terms and agreements. Please do so in your profile <a
+        href="{% url 'profile' %}">here</a>.</h1>
+{% else %}
+<div class="col-md-9 post-content" data-aos="fade-up">
+
+    <!-- ======= Single Post Content ======= -->
+    <div class="single-post mt-3">
+        <div class="post-meta"><span class="date">{{ post.category }}</span> <span class="mx-1">&bullet;</span> <span>{{ post.date_posted|date:"l F d, Y \a\t H:i" }}</span></div>
+        <div>
+          {% if post.author.id == user.id  or user.is_staff %}
+          <a href="{% url 'post-update' post.pk %}" class="btn btn-secondary btn-sm m-1">Update</a><a
+              href="{% url 'post-delete' post.pk %}" class="btn btn-danger btn-sm m-1">Delete</a>
+          {% else %}
+          <small class="text-muted">You are not the author of this post so you can not edit it!</small>
+          {% endif %}
+      </div>
+        <h1>{{ post.title }}</h1>
+
+        <p style=" border:rgb(0, 0, 0) 1px solid;">{{ post.content|safe }}</p>
+        <p class="text-muted">- {{ post.author }}</p>
+    </div><!-- End Single Post Content -->
+    <hr>
+    {% if user.username == post.author.username %}
+    <h5>You cannot vote on your own post!</h5>
+    {% else %}
+    <form action="{% url 'like_post' post.pk %}" method="POST">
+        {% csrf_token %}{% if liked %}
+        <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-warning btn-sm">Unlike</button> -
+        {{ total_likes }} Like/s
+        {% else %}
+        <button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-outline-primary btn-sm">Like</button>
+        -
+        {{ total_likes }} Like/s
+        {% endif %}
+    </form>
+
+    {% endif %}
+    <!-- ======= Comments ======= -->
+    {% if post.comments.all %}
+    <div class="comments">
+        <h5 class="comment-title py-4">{{ total_comments }} Comment/s</h5>
+        {% for comment in post.comments.all %}
+        <hr>
+        <div class="comment d-flex mb-4">
+
+            <div class="flex-shrink-0">
+                <div class="avatar avatar-sm rounded-circle">
+                    <img class="avatar-img" src="{{ comment.author.profile.profile_pic.url }}" alt="" class="img-fluid">
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-2 ms-sm-3">
+                <div class="comment-meta d-flex align-items-baseline">
+                    <h6 class="me-2">{{ comment.author.username }}</h6>
+                    <span class="text-muted">{{ comment.date_added }}</span>
+                </div>
+                <div class="comment-body">
+                    {{ comment.body|safe}}
+                </div>
+              </div>
+          {% if comment.author == user or user.is_staff or user.is_superuser %}
+              <a href="{% url 'deletecomment' comment.pk %}" class="btn btn-danger btn-sm m-2">Delete Comment</a>
+              {% endif %}
+        </div>{% endfor %}
+    </div><!-- End Comments -->
+    {% endif %}
+    <hr>
+    <!-- ======= Comments Form ======= -->
+    <div class="row justify-content-center mt-5">
+        <form name="contactForm" id="contactForm" method="post" action="{% url 'post-detail' pk %}" autocomplete="off">
+
+            <div class="col-lg-12">
+                <h5 class="comment-title">Leave a Comment</h5>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="comment-message">Put your comment body here.</label>
+                        <br>
+                        {% csrf_token %}{{ form|crispy }}
+                    </div>
+                    <div class="col-12">
+                        <input type="submit" class="btn btn-primary" value="Post comment">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div><!-- End Comments Form -->
+    <br><br>
+
+</div>
+{% endif %}
+{% endblock content %}

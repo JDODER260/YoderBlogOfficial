@@ -1,0 +1,133 @@
+{% extends 'themetwo/layout.html' %}
+{% block content%}
+{% load static %}
+{% if user.is_authenticated %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+.mod-container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  margin: 0 auto;
+  margin-bottom: 152px;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.mod-container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.mod-container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.mod-container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+</style>
+
+<body>
+
+<div align="center">
+    <h2>Yoder Chat</h2>
+    <p class="text-muted">Please enter an existing room, or create a new one.</p>
+</div>
+
+
+<div class="mod-container">
+    <style>
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    .good-btn {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+
+    .good-btn:hover {
+    background-color: #45a049;
+    }
+    </style>
+    <a class="btn good-btn" href="room/create/">Create Room</a>
+    <h1 class="text-center mt-5 mb-5">List of all avalable rooms.</h1>
+  {% for room in rooms %}
+    <div class="card mb-3">
+      <a href="{% url 'room' room.name %}" class="btn btn-outline-primary">Enter Room</a>
+      <div class="card-body">
+        <h5 class="card-title">{{ room.name }}</h5>
+        <p class="card-text">{{ room.user }}</p>
+
+        {% if room.user == user or user.is_superuser %}
+          <a href="{% url 'room-update' room.pk %}" class="btn btn-primary mr-3">Update</a>
+          <a href="{% url 'room-delete' room.pk %}" class="btn btn-danger">Delete</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+  <div style="margin: 50px;">
+        {% if is_paginated %}
+          {% if page_obj.has_previous %}
+            <a href="?page=1" class="btn btn-outline-info mb-4 mr-4">First</a>
+          {% endif %}
+          {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+            <a href="?page={{ num }}" class="btn btn-info mb-4">{{ page_obj.number }}</a>
+          {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+            <a href="?page={{ num }}" class="btn btn-outline-info mb-4">{{ num }}</a>
+          {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-info mb-4 ml-4">Last</a>
+          {% endif %}
+          <small class="text-muted">Total Pages: {{ page_obj.paginator.num_pages }}</small>
+        {% endif %}
+</div>
+</div>
+
+
+</body>
+
+{% else %}
+<h1>You have no right to be on this page get off. To access this please create or login to an account.</h1>
+{% endif %}
+{% endblock %}

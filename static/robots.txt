@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /images/
+Disallow: /js/
+Disallow: /css/
+Disallow: /php/
+Disallow: /logs/
+Disallow: /cache/
+Disallow: /uploads/

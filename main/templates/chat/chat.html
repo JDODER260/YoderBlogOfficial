@@ -1,0 +1,105 @@
+{% extends 'blog/layout.html' %}
+
+
+{% block content %}
+<div class="container-fluid mt-3">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <div class="card mb-3">
+    <div class="card-header bg text-dark" style="background-color: #8a8a8a;">
+      <h5 class="card-title mb-0">Chat with {{ person_to.username }}</h5>
+    </div>
+    <div class="card-body bg-light" style="overflow-y: scroll; height: 500px;" id="chat-messages">
+      {% for chat in chats %}
+      {% if chat.author == user %}
+      <div class="card mb-3 float-right" style="max-width: 100%; padding-left: 40%; background-color: transparent; border: none;">
+        <div class="card-body bg text-dark" style="background-color: #a5a5a5; border: 1px solid black; border-radius:50px;">
+          <p class="card-text">{{ chat.content }}</p>
+          <p class="card-text"><small class="text-dark">{{ chat.date_posted|date:"F j, Y, g:i a" }}</small></p>
+        </div>
+      </div>
+      {% else %}
+      <div class="card mb-3" style="max-width: 100%; padding-right: 40%; background-color: transparent; border: none;">
+        <div class="card-body bg text-dark" style="background-color: #7ea5ab; border: 1px solid black; border-radius:50px;">
+          <p class="card-text">{{ chat.content }}</p>
+          <p class="card-text"><small class="text-dark">{{ chat.date_posted|date:"F j, Y, g:i a" }}</small></p>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div class="card-footer bg-light">
+      <form method="POST" class="form-inline" id="chat-form">
+        {% csrf_token %}
+        <input type="hidden" name="person_to" value="{{ person_to.id }}">
+        <input type="hidden" name="author" value="{{ request.user.id }}">
+        <div class="form-group">
+
+          <div class="input-group">
+            <input type="text" class="form-control w-100" name="content" placeholder="Type your message..."
+              id="chat-input">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-primary btn-block" id="chat-button">Send</button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+<style>
+  .form-control {
+    border-radius: 0;
+  }
+
+  #chat-messages::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  #chat-messages::-webkit-scrollbar-thumb {
+    background-color: #525252;
+    border-radius: 8px;
+  }
+</style>
+
+<script>
+  $(document).ready(function () {
+    // scroll to bottom of message container
+    var chat_messages = $('#chat-messages');
+    chat_messages.scrollTop(chat_messages[0].scrollHeight);
+  const chatInput = document.getElementById('chat-input');
+  const chatButton = document.getElementById('chat-button');
+
+
+  // Reload the page every 10 seconds if the chat input is empty
+  setInterval(() => {
+    if (!chatInput.value) {
+      location.reload();
+    }
+  }, 10000);
+
+  // Disable chat button if the input is empty
+  chatInput.addEventListener('input', () => {
+    if (chatInput.value.trim().length > 0) {
+      chatButton.disabled = false;
+    } else {
+      chatButton.disabled = true;
+    }
+  });
+
+    // send message when enter is pressed
+    $('#id_content').keypress(function (event) {
+      if (event.keyCode == 13 && !event.shiftKey) {
+        event.preventDefault();
+        $('#chat-form').submit();
+      }
+    });
+
+    // submit form on button click
+    $('#send-button').click(function (event) {
+      event.preventDefault();
+      $('#chat-form').submit();
+    });
+  });
+</script>
+
+{% endblock content %}

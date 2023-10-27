@@ -1,0 +1,179 @@
+{% extends "themetwo/layout.html" %}
+{% block content %}
+{% if not user.profile.terms and user.is_authenticated %}
+<h1> You have not accepted out terms and agreements. Please do so in your profile <a
+    href="{% url 'profile' %}">here</a>.</h1>
+{% else %}
+{% if user.is_authenticated %}
+<!-- ======= Hero Slider Section ======= -->
+<section id="hero-slider" class="hero-slider">
+  <div class="container-md" data-aos="fade-in">
+    <div class="row">
+      <div class="col-12">
+        <div class="swiper sliderFeaturedPosts">
+          <div class="swiper-wrapper">
+            {% for post in hero_section %}
+            <div class="swiper-slide">
+              <a href="{% url 'post-detail' post.pk %}" class="img-bg d-flex align-items-end"
+                style="background-image: url('{{ post.background_img.url }}');">
+                <div class="img-bg-inner">
+                  <h2>{{ post.title }}</h2>
+                  {% if post.content|length > 300 %}
+                  <p>{{ post.content|slice:":300"|safe }} ... <i><span class="text-muted">(Click here to read
+                        on.)</span></i></p>
+                  {% else %}
+                  <p>{{ post.content|safe }}</p>
+                  {% endif %}
+                </div>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="custom-swiper-button-next">
+            <span class="bi-chevron-right"></span>
+          </div>
+          <div class="custom-swiper-button-prev">
+            <span class="bi-chevron-left"></span>
+          </div>
+
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section><!-- End Hero Slider Section -->
+
+<!-- ======= Post Grid Section ======= -->
+<section id="posts" class="posts">
+  <div class="container" data-aos="fade-up">
+    <div class="row g-5">
+      <div class="col-lg-4" style="overflow: hidden; border: 1px solid rgb(211, 211, 211); border-radius: 5px; padding: 5px;">
+        <div class="post-entry-1 lg">
+          <a href="{% url 'post-detail' ranone.pk %}"><img src="{{ ranone.background_img.url }}" alt=""
+              class="img-fluid"></a>
+          <div class="post-meta"><span class="date">{{ ranone.category }}</span> <span class="mx-1">&bullet;</span>
+            <span>{{ ranone.date_posted|date:"l F d, Y \a\t H:i" }}</span>
+          </div>
+          <h2><a href="{% url 'post-detail' ranone.pk %}">{{ ranone.title }}</a></h2>
+          <p class="mb-4 d-block">{{ ranone.content|safe }}</p>
+
+          <div class="d-flex align-items-center author">
+            <div class="photo"><img src="{{ ranone.author.profile.profile_pic.url }}" alt="" class="img-fluid"></div>
+            <div class="name">
+              <h3 class="m-0 p-0">{{ ranone.author.username }}</h3>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-8">
+        <div class="row g-5">
+          <div class="col-lg-4 border-start custom-border">
+            {% for post in pg1 %}
+            <div class="post-entry-1" style="border: 1px solid rgb(211, 211, 211); border-radius: 5px; padding: 5px;">
+              <a href="{% url 'post-detail' post.pk %}"><img src="{{ post.background_img.url }}" alt=""
+                  class="img-fluid"></a>
+              <div class="post-meta"><span class="date">{{ post.category }}</span> <span class="mx-1">&bullet;</span>
+                <span>{{ post.date_posted|date:"l F d, Y \a\t H:i" }}</span>
+              </div>
+              <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="col-lg-4 border-start custom-border">
+            {% for post in pg2 %}
+            <div class="post-entry-1" style="border: 1px solid rgb(211, 211, 211); border-radius: 5px; padding: 5px;">
+              <a href="{% url 'post-detail' post.pk %}"><img src="{{ post.background_img.url }}" alt=""
+                  class="img-fluid"></a>
+              <div class="post-meta"><span class="date">{{ post.category }}</span> <span class="mx-1">&bullet;</span>
+                <span>{{ post.date_posted|date:"l F d, Y \a\t H:i" }}</span>
+              </div>
+              <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
+            </div>
+            {% endfor %}
+          </div>
+
+          <!-- Trending Section -->
+          <div class="col-lg-4">
+            <div class="aside-block">
+
+              <ul class="nav nav-pills custom-tab-nav mb-4" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link active" id="pills-popular-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-popular" type="button" role="tab" aria-controls="pills-popular"
+                    aria-selected="true">Popular</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-trending-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-trending" type="button" role="tab" aria-controls="pills-trending"
+                    aria-selected="false">Trending</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" id="pills-latest-tab" data-bs-toggle="pill" data-bs-target="#pills-latest"
+                    type="button" role="tab" aria-controls="pills-latest" aria-selected="false">Latest</button>
+                </li>
+              </ul>
+
+              <div class="tab-content" id="pills-tabContent">
+
+                <!-- Popular -->
+                <div class="tab-pane fade show active" id="pills-popular" role="tabpanel"
+                  aria-labelledby="pills-popular-tab">
+                  {% for post in popular_posts %}
+                  <div class="post-entry-1 border-bottom" style="border: 1px solid rgb(211, 211, 211); border-radius: 5px; padding: 5px;">
+                    <div class="post-meta"><span class="date">{{ post.category }}</span> <span
+                        class="mx-1">&bullet;</span> <span>{{ post.date_posted|date:"l F d, Y \a\t H:i" }}</span></div>
+                    <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }} - {{ post.content|slice:":50"|safe}}<small class="text-muted" style="font-size: 15px;">...Click to
+                          read more.</small></a></h2>
+                    <span class="author mb-3 d-block">{% if post.author.get_full_name %} {{ post.author.get_full_name}}{% else %} {{ post.author.username }}{% endif %}</span>
+                  </div>
+                  {% endfor %}
+
+                </div> <!-- End Popular -->
+
+                <!-- Trending -->
+                <div class="tab-pane fade" id="pills-trending" role="tabpanel" aria-labelledby="pills-trending-tab">
+                  {% for post in trending_posts %}
+                  <div class="post-entry-1 border-bottom" style="border: 1px solid rgb(211, 211, 211); border-radius: 5px; padding: 5px;">
+                    <div class="post-meta"><span class="date">{{ post.category }}</span> <span
+                        class="mx-1">&bullet;</span>
+                      <span>{{ post.date_posted|date:"l F d, Y \a\t H:i" }}</span>
+                    </div>
+                    <h2 class="mb-2"><a href="{% url 'post-detail' post.pk %}">{{ post.title }} - {{ post.content|slice:":50"|safe}}</a></h2>
+                    <span class="author mb-3 d-block">{% if post.author.get_full_name %} {{ post.author.get_full_name}}{% else %} {{ post.author.username }}{% endif %}</span>
+                  </div>
+                  {% endfor %}
+                </div> <!-- End Trending -->
+
+                <!-- Latest -->
+                <div class="tab-pane fade" id="pills-latest" role="tabpanel" aria-labelledby="pills-latest-tab">
+                  {% for post in latest_posts %}
+                  <div class="post-entry-1 border-bottom" style="border: 1px solid rgb(211, 211, 211); border-radius: 5px; padding: 5px;">
+                    <div class="post-meta"><span class="date">{{ post.category }}</span> <span
+                        class="mx-1">&bullet;</span>
+                      <span>{{ post.date_posted|date:"l F d, Y \a\t H:i" }}</span>
+                    </div>
+                    <h2 class="mb-2"><a href="{% url 'post-detail' post.pk %}">{{ post.title }} - {{ post.content|slice:":50"|safe}}</a></h2>
+                    <span class="author mb-3 d-block">{% if post.author.get_full_name %} {{ post.author.get_full_name}}{% else %} {{ post.author.username }}{% endif %}</span>
+                  </div>
+                  {% endfor %}
+                </div> <!-- End Latest -->
+
+              </div>
+            </div>
+          </div> <!-- End Trending Section -->
+        </div>
+      </div>
+
+    </div> <!-- End .row -->
+  </div>
+</section> <!-- End Post Grid Section -->
+<footer>This is a filtered page if you want to see any specific post category go to the Categories menu in the
+  navigation bar!</footer>
+{% else %}
+<h1>You will need to login to access this page!</h1>
+{% endif %}
+{% endif %}
+
+{% endblock content%}

@@ -1,0 +1,36 @@
+{% extends 'themetwo/layout.html' %}
+
+{% block title %}New Category{% endblock title %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+
+{% if user.is_authenticated and not user.profile.terms %}
+    <div class="alert alert-warning" role="alert">
+        You have not accepted our terms and agreements. Please do so in your <a href="{% url 'profile' %}">profile</a>.
+    </div>
+{% else %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {% if user.is_authenticated %}
+                <h2 class="mb-4">Create Category</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <br>
+                    <button class="btn btn-primary" type="submit">Create</button>
+                </form>
+                <br><br>
+                {% else %}
+                <div class="alert alert-danger" role="alert">
+                    You do not have the necessary permissions to view this page.
+                </div>
+                <a class="btn btn-danger" href="{% url 'blog-home' %}">Go Home</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock content %}

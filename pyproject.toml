@@ -1,0 +1,23 @@
+[build-system]
+build-backend = "poetry.masonry.api"
+requires = ["poetry>=0.12"]
+
+[tool]
+[tool.poetry]
+authors = ["Judah Yoder <jdoder@jdswebsites.xyz>"]
+description = "Yoder Blog is a Custom Blog made with HTML CSS JavaScript and most of all python. In this version of Yoder Blog, I use Django. This is a Blog mainly used by the —as you guessed it— Yoders."
+name = "Yoder Blog"
+version = "0.1.0"
+[tool.poetry.dependencies]
+python = "^3.8"
+"backports.zoneinfo" = "^0.2.1"
+django-ckeditor = "^6.4.2"
+django-crispy-forms = "^1.14.0"
+Pillow = "^9.2.0"
+emmet = "^2018.6.7"
+django-filter = "^22.1"
+Django = "^4.1"
+gunicorn = "^20.1.0"
+django-select2 = "^8.1.1"
+openai = "^0.26.5"
+[tool.poetry.dev-dependencies]

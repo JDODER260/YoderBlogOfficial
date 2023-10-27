@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+Please click on the link below to activate your account on {{ domain }}:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+Thank you for joining our community!
+
+Best regards,
+The Team
+{% endautoescape %}

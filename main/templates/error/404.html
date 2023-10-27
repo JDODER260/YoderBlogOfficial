@@ -1,0 +1,8 @@
+{% extends "blog/layout.html" %}
+{% block content %}
+    <div class="content-section">
+        <h2>Sorry. Page not found (404).</h2>
+        <h6>{% if error %}The error is "{{ error }}" {% endif %}</h6>
+        <p>That page does not exist. Please try a different location.</p>
+    </div>
+{% endblock content %}

@@ -1,0 +1,58 @@
+{% extends "blog/layout.html" %}
+
+{% block content %}
+{% if user.is_staff or user.is_superuser %}
+  {% for user in users %}
+  <article class="media content-section">
+    <img src="{{ user.profile.profile_pic.url }}" alt="" class="rounded-circle article-img">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'user-posts' user.username %}">{{ user.username }}</a>
+        <small class="text-muted">{{ user.date_joined|date:"l F d, Y \a\t H:i" }}</small>
+        {% if user.profile.are_active == False %}
+        🔴
+      {% else %}
+        🟢
+      {% endif %}
+      </div>
+      <h2><a class="article-title" href="{% url 'user-posts' user.username %}">{{ user.username }}</a></h2>
+      <p class="article-content">{{ user.profile.bio|safe }}</p>
+      <p class="article-content">IP: {{ user.profile.ip }}</p>
+      <p class="article-content">GPS Coords: {{ user.profile.gps_coords }}</p>
+      <a href="{% url 'location' user.username %}" class="btn btn-primary">View Location</a>
+      <hr>
+      <p class="article-content">Theme: {{ user.profile.theme }}</p>
+      <p class="article-content">Likes: {{ user.profile.total_likes }}</p>
+      <p class="article-content">Last Active: {{ user.profile.last_active }}</p>
+      <p class="article-content">Are Active: {{ user.profile.are_active }}</p>
+      <p class="article-content">Layout: {{ user.profile.layout }}</p>
+      <a href="{% url 'user-posts' user.username %}" class="btn btn-primary">View Posts</a>
+      {% if user.profile.are_active == False %}
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Red_circle.svg/1200px-Red_circle.svg.png" width="10px" height="10px">
+      {% endif %}
+    </div>
+  </article>
+{% endfor %}
+
+  <div style="margin: 50px;">
+    {% if is_paginated %}
+      {% if page_obj.has_previous %}
+        <a href="?page=1" class="btn btn-outline-info mb-4 mr-4">First</a>
+      {% endif %}
+      {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <a href="?page={{ num }}" class="btn btn-info mb-4">{{ page_obj.number }}</a>
+      {% elif num > page_obj.number|add:'-4' and num < page_obj.number|add:'4' %}
+                <a href="?page={{ num }}" class="btn btn-outline-info mb-4">{{ num }}</a>
+      {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-info mb-4 ml-4">Last</a>
+      {% endif %}
+      <small class="text-muted">Total Pages: {{ page_obj.paginator.num_pages }}</small>
+    {% endif %}
+  </div>
+{% else %}
+<h2>You are not a moderator please leave this page and go home. <a href="/" class="btn btn-sm btn-outline-danger">Go Home</a></h2>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,25 @@
+{% extends "themetwo/layout.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-lg border-0 rounded-lg mt-5">
+        <div class="card-header">
+          <h3 class="text-center font-weight-light my-4">Join Today</h3>
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn btn-primary btn-block" type="submit">Sign Up</button>
+          </form>
+        </div>
+        <div class="card-footer text-center">
+          <div class="small"><a href="{% url 'login' %}">Have an account? Login</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
