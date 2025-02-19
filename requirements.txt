@@ -19,7 +19,7 @@ idna==3.4
 multidict==6.0.4
 openai==0.28.1
 outcome==1.3.0
-Pillow==10.1.0
+Pillow==11.1.0
 pycparser==2.21
 PySocks==1.7.1
 requests==2.31.0
